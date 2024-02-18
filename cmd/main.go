@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/bwcroft/go-crypto/api/coinGecko"
+	"github.com/bwcroft/go-crypto/handlers"
 )
 
 func printCoins() {
@@ -17,16 +18,6 @@ func printCoins() {
 	}
 }
 
-func printCoin(id string) {
-	coin, err := coinGecko.GetCoin(id)
-
-	if err != nil {
-		println("Unable to fetch coin")
-	}
-
-	fmt.Printf("Name: %s, Symbol: %s\n", coin.Name, coin.Symbol)
-}
-
 func main() {
-	printCoin("bitcoin")
+	handlers.PrintCoins()
 }

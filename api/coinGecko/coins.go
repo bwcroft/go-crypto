@@ -11,6 +11,22 @@ type Coin struct {
 	Name   string `json:"name"`
 }
 
+type CoinFull struct {
+	Coin
+	WebSlug       string     `json:"web_slug"`
+	AssetPlatform string     `json:"asset_platform"`
+	Algorithm     string     `json:"hashing_algorithm"`
+	MarketData    MarketData `json:"market_data"`
+}
+
+type MarketData struct {
+	CurrentPrice CurrentPrice `json:"current_price"`
+}
+
+type CurrentPrice struct {
+	USD uint32 `json:"usd"`
+}
+
 func GetCoins() ([]Coin, error) {
 	response, err := ClientCoinGecko.Get("/coins/list")
 	if err != nil {
@@ -26,7 +42,7 @@ func GetCoins() ([]Coin, error) {
 	return coins, nil
 }
 
-func GetCoin(id string) (*Coin, error) {
+func GetCoin(id string) (*CoinFull, error) {
 	url := fmt.Sprintf("/coins/%v", id)
 
 	response, err := ClientCoinGecko.Get(url)
@@ -34,7 +50,7 @@ func GetCoin(id string) (*Coin, error) {
 		return nil, err
 	}
 
-	var coin *Coin
+	var coin *CoinFull
 	err = json.NewDecoder(response.Body).Decode(&coin)
 	if err != nil {
 		return nil, err
